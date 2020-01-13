@@ -138,7 +138,7 @@ https://standardjs.com/readme-zhcn.html
 
 https://github.com/sivan/javascript-style-guide/blob/master/es5/README.md
 
-![image-20200113155243295](iamges/image-20200113155243295.png)
+![image-20200113155243295](images/image-20200113155243295.png)
 
 ## 安装Node环境
 [Node安装步骤](http://note.youdao.com/noteshare?id=97dfe5ab89d5386d4575bf4ebfd4ed2d)
