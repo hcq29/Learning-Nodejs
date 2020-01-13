@@ -2,7 +2,7 @@
 
 > 官网:https://nodejs.org/en/
 >
-> <img src="images\image-20200112160531774.png" alt="image-20200112160531774" style="zoom: 50%;" />
+> <img src="images/image-20200112160531774.png" alt="image-20200112160531774" style="zoom: 50%;" />
 
 **“Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine.”**
 
@@ -138,7 +138,7 @@ https://standardjs.com/readme-zhcn.html
 
 https://github.com/sivan/javascript-style-guide/blob/master/es5/README.md
 
-![image-20200113155243295](images/image-20200113155243295.png)
+![image-20200113155243295](/image-20200113155243295.png)
 
 ## 安装Node环境
 [Node安装步骤](http://note.youdao.com/noteshare?id=97dfe5ab89d5386d4575bf4ebfd4ed2d)
@@ -177,7 +177,7 @@ console.log(name);
 
 2. 在终端输入`node 01-HelloWorld.js`
 
-![终端输出Hello World](images\image-20200108153942644.png)
+![终端输出Hello World](images/image-20200108153942644.png)
 
 ## 注意事项
 
@@ -185,7 +185,7 @@ console.log(name);
 
 在node中，采用的是ECMAScript进行编码，所以没有DOM和BOM，就不存在window和document，尝试输出window和document会显示不存在。和浏览器中的JavaScript不一样
 
-![尝试输出window和document出错](images\image-20200108154313311.png)
+![尝试输出window和document出错](images/image-20200108154313311.png)
 
 ## 读取文件
 
@@ -239,7 +239,7 @@ fs.readFile('testFile.txt',function(error, data){
 
 读取成功并输出：
 
-![读取文件内容](images\image-20200108200929306.png)
+![读取文件内容](images/image-20200108200929306.png)
 
 **注意**
 
@@ -259,7 +259,7 @@ if(error){
 
 - 尝试去读取不存在的文件，就发生错误，输出一个错误对象
 
-![读取不存在的文件报错](images\image-20200108204718722.png)
+![读取不存在的文件报错](images/image-20200108204718722.png)
 
 ## 写入文件
 
@@ -284,14 +284,14 @@ fs.writeFile('testFile.txt', '你们好！', function(error){
 
 `node writeFile.js`
 
-<img src="images\image-20200108203611790.png" alt="写入文件成功！" style="zoom: 67%;" />
+<img src="images/image-20200108203611790.png" alt="写入文件成功！" style="zoom: 67%;" />
 
 **注意**
 
 -  尝试往一个不存在的文件写入内容，则首先创建文件后再写入。
 - 命名规定不允许包含某些关键符号，尝试向一个不合法的文件名写入内容，会写入失败。
 
-<img src="images\image-20200108205745285.png" alt="文件错误命名" style="zoom:80%;" />
+<img src="images/image-20200108205745285.png" alt="文件错误命名" style="zoom:80%;" />
 
 ```js
 fs.writeFile('a>.txt', '你们好！', function(error){ //错误文件名
@@ -299,7 +299,7 @@ fs.writeFile('a>.txt', '你们好！', function(error){ //错误文件名
 })
 ```
 
-![往错误命名的文件写入报错](images\image-20200108205950653.png)
+![往错误命名的文件写入报错](images/image-20200108205950653.png)
 
 - error的作用
 
@@ -374,9 +374,9 @@ server.listen(3000, function(error){
 
 在浏览器中打开http://127.0.0.1:3000/，可以看到一条客户端的请求，再刷新可以看到多条。
 
-![简单实现http服务器](images\image-20200108212844387.png)
+![简单实现http服务器](images/image-20200108212844387.png)
 
-<img src="images\4E061CFC.png" alt="img" style="zoom: 80%;" />提示：当前服务正在等待状态，需要关闭服务的话按Ctrl+C即可。且两个服务不可以同时占用同一个端口。
+<img src="images/4E061CFC.png" alt="img" style="zoom: 80%;" />提示：当前服务正在等待状态，需要关闭服务的话按Ctrl+C即可。且两个服务不可以同时占用同一个端口。
 
 ### 附加：端口号
 
@@ -386,7 +386,7 @@ server.listen(3000, function(error){
 
 **所谓的端口，就好像是门牌号一样，客户端可以通过ip地址找到对应的服务器端，但是服务器端是有很多端口的，每个应用程序对应一个端口号，通过类似门牌号的端口号，客户端才能真正的访问到该服务器。为了对端口进行区分，将每个端口进行了编号，这就是端口号。**
 
-![端口号示例](images\image-20200112160326232.png)
+![端口号示例](images/image-20200112160326232.png)
 
 - IP地址是用来定位计算机的
 - 端口号是用来制定具体应用程序的
@@ -412,7 +412,7 @@ server.listen(3000, function(error){
 
  因为我们的服务器的处理能力是很弱的，无论是什么路径的请求，返回的救过都是一样的。
 
-  <img src="images\4E015F9B.jpg" alt="img" style="zoom: 25%;" />**思考：怎样让我们的服务器处理不同的请求相应不同的结果呢？**
+  <img src="images/4E015F9B.jpg" alt="img" style="zoom: 25%;" />**思考：怎样让我们的服务器处理不同的请求相应不同的结果呢？**
 
   比如说：输入/（浏览器默认从/开始访问），这时候返回一个index
 
@@ -452,7 +452,7 @@ server.listen(3000, function(error){
 
 再者，我们一般接收到的数据是JSON格式、数字、对象又或者是数组的，在发送之前以对象等形式发送的话，就会报错，<font color="red">因为只能响应**字符串或二进制数据**的内容</font>。
 
-![响应数据格式错误](images\image-20200109001541699.png)
+![响应数据格式错误](images/image-20200109001541699.png)
 
 解决：使用`JSON.stringify()`方法将他们转化为字符串再发送。
 
@@ -542,7 +542,7 @@ response.setHeader('Content-Type','text/html; charset=utf-8');
 response.setHeader('Content-Type','image/jpeg');
 ```
 
-<img src="images\image-20200112165144420.png" alt="image-20200112165144420" style="zoom:80%;" />  
+<img src="images/image-20200112165144420.png" alt="image-20200112165144420" style="zoom:80%;" />  
 
 字段值分类：
 
@@ -610,7 +610,7 @@ aaa
 
 - `require`是用来加载文件模块并执行。
 
-![img](file:///C:\Users\Dell\AppData\Local\Temp\SGPicFaceTpBq\49384\61499410.png)相对路径必须添加 `./`   （不可以省略，没有`./`的话就认为是核心模块导致错误，后缀名可以省略）
+![img](images/4E061CFC.png)相对路径必须添加 `./`   （不可以省略，没有`./`的话就认为是核心模块导致错误，后缀名可以省略）
 
 - 引入的文件，会递归的去执行；node中不存在全局作用域，只存在**模块作用域**，简单来说就是文件作用域，
   模块作用域表示外部访问不到内部，内部访问不到外部。`b.js`中访问不到`a.js`中的`name`，`a.js`的变量`name`不会被`b.js`中的变量覆盖。只使用require，被引入的文件中的变量不会污染本文件的变量。
@@ -639,7 +639,7 @@ var age = 20;
 exports.age = age;
 ```
 
-![exports导出对象](images\image-20200112150947562.png)
+![exports导出对象](images/image-20200112150947562.png)
 
 同样可以添加自定义方法并导出
 
@@ -654,7 +654,7 @@ exports.add = function(x, y){
 }
 ```
 
-![image-20200112151532699](images\image-20200112151532699.png)
+![image-20200112151532699](images/image-20200112151532699.png)
 
 ### http结合readFile实现传输文件数据
 
