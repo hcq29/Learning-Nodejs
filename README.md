@@ -760,3 +760,27 @@ server.on('request',function(req, res){
 </body>
 </html>
 ```
+
+进一步简写
+
+```js
+var http = require('http');
+var fs = require('fs');
+
+var server = http.createServer(function(){
+    
+});
+var wwwDir = 'E:/study/test'; //这里填入默认路径
+
+server.on('request',function(req, res){
+
+
+}).listen(3000, function(error){
+
+})
+```
+
+### 使用readdir()实现简易类似apache文件目录
+
+`readdir()`方法表示读取文件夹
+

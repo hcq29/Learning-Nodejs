@@ -1,25 +1,19 @@
 var http = require('http');
 var fs = require('fs');
 
-var server = http.createServer();
 var wwwDir = '.'; //这里填入默认路径
-server.on('request',function(req, res){
+http.createServer(function(req, res){
     var url = req.url;
     var filePath = './index.html';
     if(url !== '/'){
         filePath = req.url;
     }
-    // console.log('req.url::' + req.url);
-    // console.log('wwwDir::' + wwwDir);
-    // console.log('filePath::' + filePath);
-    // console.log(wwwDir + filePath);
     fs.readFile(wwwDir + filePath,function(error, data){
         if(error){
             return res.end('404 Not Found');
         }
         res.end(data);
     })
-
 
 }).listen(3000, function(error){
     if(error){
