@@ -780,7 +780,178 @@ server.on('request',function(req, res){
 })
 ```
 
-### 使用readdir()实现简易类似apache文件目录
+### readdir()
 
-`readdir()`方法表示读取文件夹
+使用readdir()实现部分功能类似apache文件目录，`readdir()`方法表示读取文件夹
 
+先读取文件，然后将文件的内容展示在`template.html`中
+
+template.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>template</title>
+    <style>
+
+        h1 {
+          border-bottom: 1px solid #c0c0c0;
+          margin-bottom: 10px;
+          padding-bottom: 10px;
+          white-space: nowrap;
+        }
+      
+        table {
+          border-collapse: collapse;
+        }
+      
+        th {
+          cursor: pointer;
+        }
+      
+        td.detailsColumn {
+          -webkit-padding-start: 2em;
+          text-align: end;
+          white-space: nowrap;
+        }
+      
+        a.icon {
+          -webkit-padding-start: 1.5em;
+          text-decoration: none;
+        }
+      
+        a.icon:hover {
+          text-decoration: underline;
+        }
+      
+        a.file {
+          background : url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMAAAAAAABupgeRAAABHUlEQVR42o2RMW7DIBiF3498iHRJD5JKHurL+CRVBp+i2T16tTynF2gO0KSb5ZrBBl4HHDBuK/WXACH4eO9/CAAAbdvijzLGNE1TVZXfZuHg6XCAQESAZXbOKaXO57eiKG6ft9PrKQIkCQqFoIiQFBGlFIB5nvM8t9aOX2Nd18oDzjnPgCDpn/BH4zh2XZdlWVmWiUK4IgCBoFMUz9eP6zRN75cLgEQhcmTQIbl72O0f9865qLAAsURAAgKBJKEtgLXWvyjLuFsThCSstb8rBCaAQhDYWgIZ7myM+TUBjDHrHlZcbMYYk34cN0YSLcgS+wL0fe9TXDMbY33fR2AYBvyQ8L0Gk8MwREBrTfKe4TpTzwhArXWi8HI84h/1DfwI5mhxJamFAAAAAElFTkSuQmCC ") left top no-repeat;
+        }
+      
+        a.dir {
+          background : url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAd5JREFUeNqMU79rFUEQ/vbuodFEEkzAImBpkUabFP4ldpaJhZXYm/RiZWsv/hkWFglBUyTIgyAIIfgIRjHv3r39MePM7N3LcbxAFvZ2b2bn22/mm3XMjF+HL3YW7q28YSIw8mBKoBihhhgCsoORot9d3/ywg3YowMXwNde/PzGnk2vn6PitrT+/PGeNaecg4+qNY3D43vy16A5wDDd4Aqg/ngmrjl/GoN0U5V1QquHQG3q+TPDVhVwyBffcmQGJmSVfyZk7R3SngI4JKfwDJ2+05zIg8gbiereTZRHhJ5KCMOwDFLjhoBTn2g0ghagfKeIYJDPFyibJVBtTREwq60SpYvh5++PpwatHsxSm9QRLSQpEVSd7/TYJUb49TX7gztpjjEffnoVw66+Ytovs14Yp7HaKmUXeX9rKUoMoLNW3srqI5fWn8JejrVkK0QcrkFLOgS39yoKUQe292WJ1guUHG8K2o8K00oO1BTvXoW4yasclUTgZYJY9aFNfAThX5CZRmczAV52oAPoupHhWRIUUAOoyUIlYVaAa/VbLbyiZUiyFbjQFNwiZQSGl4IDy9sO5Wrty0QLKhdZPxmgGcDo8ejn+c/6eiK9poz15Kw7Dr/vN/z6W7q++091/AQYA5mZ8GYJ9K0AAAAAASUVORK5CYII= ") left top no-repeat;
+        }
+      
+        a.up {
+          background : url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAmlJREFUeNpsU0toU0EUPfPysx/tTxuDH9SCWhUDooIbd7oRUUTMouqi2iIoCO6lceHWhegy4EJFinWjrlQUpVm0IIoFpVDEIthm0dpikpf3ZuZ6Z94nrXhhMjM3c8895977BBHB2PznK8WPtDgyWH5q77cPH8PpdXuhpQT4ifR9u5sfJb1bmw6VivahATDrxcRZ2njfoaMv+2j7mLDn93MPiNRMvGbL18L9IpF8h9/TN+EYkMffSiOXJ5+hkD+PdqcLpICWHOHc2CC+LEyA/K+cKQMnlQHJX8wqYG3MAJy88Wa4OLDvEqAEOpJd0LxHIMdHBziowSwVlF8D6QaicK01krw/JynwcKoEwZczewroTvZirlKJs5CqQ5CG8pb57FnJUA0LYCXMX5fibd+p8LWDDemcPZbzQyjvH+Ki1TlIciElA7ghwLKV4kRZstt2sANWRjYTAGzuP2hXZFpJ/GsxgGJ0ox1aoFWsDXyyxqCs26+ydmagFN/rRjymJ1898bzGzmQE0HCZpmk5A0RFIv8Pn0WYPsiu6t/Rsj6PauVTwffTSzGAGZhUG2F06hEc9ibS7OPMNp6ErYFlKavo7MkhmTqCxZ/jwzGA9Hx82H2BZSw1NTN9Gx8ycHkajU/7M+jInsDC7DiaEmo1bNl1AMr9ASFgqVu9MCTIzoGUimXVAnnaN0PdBBDCCYbEtMk6wkpQwIG0sn0PQIUF4GsTwLSIFKNqF6DVrQq+IWVrQDxAYQC/1SsYOI4pOxKZrfifiUSbDUisif7XlpGIPufXd/uvdvZm760M0no1FZcnrzUdjw7au3vu/BVgAFLXeuTxhTXVAAAAAElFTkSuQmCC ") left top no-repeat;
+        }
+      
+        html[dir=rtl] a {
+          background-position-x: right;
+        }
+      
+        #parentDirLinkBox {
+          margin-bottom: 10px;
+          padding-bottom: 10px;
+        }
+      
+        #listingParsingErrorBox {
+          border: 1px solid black;
+          background: #fae691;
+          padding: 10px;
+          display: none;
+        }
+      </style>
+</head>
+
+<body>
+    <h1 id="header">E:\study\test\ 的索引</h1>
+    <table>
+        <thead>
+            <tr class="header" id="theader">
+                <th id="nameColumnHeader" tabindex="0" role="button">名称</th>
+                <th id="sizeColumnHeader" class="detailsColumn" tabindex="0" role="button">
+                    大小
+                </th>
+                <th id="dateColumnHeader" class="detailsColumn" tabindex="0" role="button">
+                    修改日期
+                </th>
+            </tr>
+        </thead>
+        <tbody id="tbody">^_^</tbody>
+    </table>
+</body>
+
+</html>
+```
+
+04-Apache-目录列表.js
+
+```js
+var http = require('http');
+var fs = require('fs');
+
+var server = http.createServer()
+var wwwDir = './'; //这里填入默认路径
+server.on('request', function(req, res){
+    fs.readFile('./template.html',function(err, data){
+        if(err) return console.log('文件不存在');
+
+        fs.readdir(wwwDir, function(err , file){
+            if(err){
+                return console.log('目录不存在');
+            }
+            console.log(file);
+            var content = '';
+            file.forEach(item => {
+                content += `
+                    <tr>
+                        <td data-value="index.html"><a class="icon file" draggable="true">${item}</a></td>
+                        <td class="detailsColumn" data-value="280">280 B</td>
+                        <td class="detailsColumn" data-value="1578843824">2020/1/12 下午11:43:44</td>
+                    </tr>
+                `
+            });
+            data = data.toString();
+            data = data.replace('^_^',content)
+            res.end(data);
+        })
+    })
+}).listen(3000, function(error){
+    if(error) return console.log('服务器开启失败');
+    console.log('服务器开启成功，可以通过 http://127.0.0.1:3000 进行访问');
+})
+```
+
+
+
+其中`^_^`这个特殊符号作为要替换的自定义特殊字符串。
+
+显示的效果如下：
+
+<img src="images/image-20200124150753902.png" alt="image-20200124150753902" style="zoom:50%;" />
+
+### art-template
+
+官方文档：http://aui.github.io/art-template/zh-cn/docs/api.html
+
+#### 介绍
+
+art-template 是一个简约、超快的**模板引擎**。
+
+它采用作用域预声明的技术来优化模板渲染速度，从而获得接近 JavaScript 极限的运行性能，并且同时支持 NodeJS 和浏览器。[在线速度测试](http://aui.github.io/art-template/rendering-test/)。
+
+#### 特性
+
+1. 拥有接近 JavaScript 渲染极限的的性能
+2. 调试友好：语法、运行时错误日志精确到模板所在行；支持在模板文件上打断点（Webpack Loader）
+3. 支持 Express、Koa、Webpack
+4. 支持模板继承与子模板
+5. 浏览器版本仅 6KB 大小
+
+#### 安装
+
+在相应要使用的目录输入以下命令
+
+```shell
+npm install art-template --save
+```
+
+<img src="images/image-20200124152102434.png" alt="image-20200124152102434" style="zoom:80%;" />
+
+#### 使用
