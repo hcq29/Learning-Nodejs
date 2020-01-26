@@ -138,6 +138,12 @@ https://github.com/sivan/javascript-style-guide/blob/master/es5/README.md
 
 ![image-20200113155243295](images/image-20200113155243295.png)
 
+分号问题，编写的内容中，包括以下符号开头时，最好在前面加上`;`，避免出现一些问题，以体现更好的维护性。
+
+- `(`
+- `[`
+- `
+
 ## 安装Node环境
 [Node安装步骤](http://note.youdao.com/noteshare?id=97dfe5ab89d5386d4575bf4ebfd4ed2d)
 
@@ -926,11 +932,13 @@ server.on('request', function(req, res){
 
 <img src="images/image-20200124150753902.png" alt="image-20200124150753902" style="zoom:50%;" />
 
-### art-template
+遗留问题：这样的一个获取文件目录还只是获取了一层，对应的文件夹与文件还是有区别的，以及时间和大小依旧没有正确的获取，可自行尝试实现。
+
+## art-template
 
 官方文档：http://aui.github.io/art-template/zh-cn/docs/api.html
 
-#### 介绍
+### 介绍
 
 art-template 是一个简约、超快的**模板引擎**。
 
@@ -944,7 +952,7 @@ art-template 是一个简约、超快的**模板引擎**。
 4. 支持模板继承与子模板
 5. 浏览器版本仅 6KB 大小
 
-#### 安装
+### 安装
 
 在相应要使用的目录输入以下命令
 
@@ -954,4 +962,303 @@ npm install art-template --save
 
 <img src="images/image-20200124152102434.png" alt="image-20200124152102434" style="zoom:80%;" />
 
-#### 使用
+### 在浏览器中使用
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>01-在浏览器中使用art-template</title>
+</head>
+<body>
+    <!-- 在浏览器中引入lib/template-web.js文件，注意：模板引擎不关心字符串内容，只关心模板标记语法，比如{{}}，{{}}被称之为mustache语法，八字符语法-->
+    <script src="node_modules/art-template/lib/template-web.js"></script>
+    <!-- 将script的type类型规定为text/template，id为自定义 -->
+    <!-- 使用{{ }} 来替换相关数据 -->
+    <script type="text/template" id="tpl">
+        hello {{ name }}
+    </script>
+    <script>
+        //为对应的script绑定模板，添加对应的数据。
+        var ret = template('tpl', {
+            name: 'Jack'
+        });
+        console.log(ret);
+    </script>
+</body>
+</html>
+```
+
+另外，即使在模板引擎中使用标签也会被当做是普通的字符串，例如以下
+
+```html
+<p>hello {{ name }}</p>
+```
+
+最终打印结果
+
+![image-20200126143011996](images/image-20200126143011996.png)
+
+### 在Node.js中使用
+
+1. 下载安装：`npm install art-template`
+2. 在需要的文件模块中加载 `art-template`
+   1. 使用`require` 方法加载：`require('art-template')`
+3. 查看相关文档中的AIP使用
+
+```js
+// 加载相关模块，使用require('art-template')
+var template = require('art-template');
+
+// 定义要替换的字符串
+var str = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>02-在Node中使用art-template</title>
+    </head>
+    <body>
+        <p>hello {{ name }}</p>
+    </body>
+    </html>
+`;
+
+// 使用AIP，render
+var result = template.render(str, {
+    name: 'Jack'
+});
+console.log(result);
+```
+
+打印结果
+
+![image-20200126145249395](images/image-20200126145249395.png)
+
+既然它可以处理解析字符串，那么我们就可以读取一个文件进行模板引擎的替换了
+
+编写一个文件tpl.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>03-在Node中巧妙使用art-template</title>
+</head>
+
+<body>
+    <p>hello {{ name }}</p>
+</body>
+
+</html>
+```
+
+在js中使用`fs`核心模块去读取，与上述效果相同
+
+```javascript
+var template = require('art-template');
+var fs = require('fs');
+
+fs.readFile('./tpl.html', function (error, data) {
+    if (error) return console.log('读取文件失败！');
+
+    // 使用AIP，render
+    var result = template.render(data.toString(), {
+        name: 'Jack'
+    });
+    console.log(result);
+})
+```
+
+![img](images/0D8968D6.png)注意：render接收的是字符串类型的数据，因此需要将读取到的二进制数据转化成字符串类型的数据。
+
+### 运用模板引擎
+
+在之前的Apache-目录列表中，我们将之替换成使用模板引擎来实现，在需要替换的地方使用{{}}即可，所获取的文件不是直接给客户端，而是经过后端处理后再给客户端的。
+
+在template.html中写入模板
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>{{ title }}</title>
+  <style>
+    /* 样式省略 */
+  </style>
+</head>
+
+<body>
+  <h1 id="header">E:\study\test\ 的索引</h1>
+  <table>
+    <thead>
+      <tr class="header" id="theader">
+        <th id="nameColumnHeader" tabindex="0" role="button">名称</th>
+        <th id="sizeColumnHeader" class="detailsColumn" tabindex="0" role="button">
+          大小
+        </th>
+        <th id="dateColumnHeader" class="detailsColumn" tabindex="0" role="button">
+          修改日期
+        </th>
+      </tr>
+    </thead>
+    <tbody id="tbody">
+      {{each filesObj}}
+      <tr>
+        <td data-value="index.html"><a class="icon {{$value.type}}" draggable="true"
+            href="#">{{$value.name}}</a></td>
+        <td class="detailsColumn" data-value="280">{{$value.size}}</td>
+        <td class="detailsColumn" data-value="1578843824">{{$value.mtime}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</body>
+
+</html>
+```
+
+在node后台中将数据进行转换并替换
+
+```javascript
+var http = require('http');
+var fs = require('fs');
+var template = require('art-template');
+
+var server = http.createServer()
+var wwwDir = 'E:/study/test/'; //这里填入默认路径
+server.on('request', function (req, res) {
+    fs.readFile('./template.html', function (err, data) {
+        if (err) return console.log('文件不存在');
+
+        fs.readdir(wwwDir, function (err, files) {
+            if (err) {
+                return console.log('目录不存在');
+            }
+            console.log(files);
+            let filesObj = [];
+            for (let i = 0; i < files.length; i++) {
+                var stat = fs.lstatSync(wwwDir + files[i]);
+                var is_direc = stat.isDirectory();
+                var size = (stat.size / 1024).toFixed(2) + "KB";
+                var dtime = formatDate(stat.mtimeMs);
+                if (is_direc) {
+                    filesObj[i] = {
+                        type: 'dir',
+                        name: files[i],
+                        size: size,
+                        mtime: dtime
+                    }
+                } else {
+                    filesObj[i] = {
+                        type: 'file',
+                        name: files[i],
+                        size: size,
+                        mtime: dtime
+                    }
+                }
+            }
+            console.log(filesObj)
+            var ret = template.render(data.toString(), {
+                filesObj: filesObj
+            })
+            res.end(ret);
+        })
+    })
+}).listen(3000, function (error) {
+    if (error) return console.log('服务器开启失败');
+    console.log('服务器开启成功，可以通过 http://127.0.0.1:3000 进行访问');
+})
+
+function formatDate(shijianchuo) {
+    var time = new Date(shijianchuo); 
+    var y = time.getFullYear();
+    var m = time.getMonth() + 1;
+    var d = time.getDate();
+    var h = time.getHours();
+    var mm = time.getMinutes();
+    var s = time.getSeconds();
+    return y + '/' + isZero(m) + '/' + isZero(d) + ' ' + isZero(h) + ':' + isZero(mm) + ':' + isZero(s);
+}
+function isZero(m) {
+    return m < 10 ? '0' + m : m
+}
+
+```
+
+最终效果
+
+<img src="images/image-20200126161520406.png" alt="image-20200126161520406" style="zoom: 67%;" />
+
+>  本节小结：
+
+- 其实Node中的模板引擎本质上是字符串替换
+- Node中的实现的模板引擎是后端渲染的一种技术
+
+## 两种渲染方式
+
+由于早期的网站都是简单，没有复杂逻辑的页面，这些页面都是由后端直接处理后将html进行拼接后，把完整的html文件发送给前端，而前端要做的事情就是将他们解析并展现出来，这个过程也就是服务器渲染。而随着页面的复杂化，前端不仅仅只是展示一些普通的页面了，可能还需要添加一些复杂的组件，或者是多功能的事件，还有一个重要的原因就是，随着Ajax的兴起，更多的开发者喜欢这种前后分离的开发模式，就是后端不是直接提供完整的html页面了，而是将一些数据发送给前端，让前端去自行拼接起来，然后再展示到浏览器中，这就是客户端渲染。
+
+为了更好的理解这两种渲染方式，我们引入三个专有名词：**SPA、SEO、SSR**
+
+- **SPA**（single page application） 单页面应用，是前后端分离时提出的一种解决方案。
+   优点：页面之间切换快；减少了服务器压力；
+   缺点：首屏打开速度慢，不利于 SEO 搜索引擎优化。
+- **SEO**（search engine optimization）搜索引擎优化，利用搜索引擎的规则提高网站在有关搜索引擎内的自然排名。
+   我们之前说 SPA 单页面应用，通过 ajax 获取数据，这就难保证我们的页面能被搜索引擎收到。并且有一些搜索引擎不支持的 js 和通过 ajax 获取的数据，那就更不用提 SEO 了，为解决这个问题，SSR 就能够解决。
+- **SSR** （server side rendering）服务端渲染，SSR 的出现一定程度上解决了 SPA 首屏慢的问题，又极大的减少了普通 SPA 对于 SEO 的不利影响。
+
+
+### 服务器渲染和客户端渲染的区别
+
+两者的本质区别就是：将文件交付给谁进行拼接处理，如果是在服务端进行处理后的数据返回给客户端的就是服务器渲染，如果是客户端接收到数据，然后进行处理的就是客户端渲染。
+
+示例：
+
+在浏览器中查看一个页面的源代码，如果页面中的数据能够在源代码中查找到，那么就是服务器渲染过来的，如果查找不到，那么就是客户端动态加载的。
+
+### SSR （server side rendering）服务端渲染
+
+在服务端进行处理后的数据返回给客户端
+
+![image-20200126182120715](images/image-20200126182120715.png)
+
+**优点：**
+
+1. 前端渲染所要耗时少。因为后端拼接完了html，浏览器只需要直接渲染出来。
+2. 有利于SEO搜索引擎优化。因为在后端提供了完整的html页面，所以爬虫更容易爬取获得信息。
+3. 无需占用客户端资源。即解析模板的工作完全交由后端来做，客户端只要解析标准的html页面即可，这样对于客户端的资源占用更少，尤其是移动端，也可以更省电。
+
+**缺点：**
+
+1. 不利于前后端分离，开发效率低。使用服务器端渲染，则无法进行分工合作，则对于前端复杂度高的项目，不利于项目高效开发。另外，如果是服务器端渲染，则前端一般就是写一个静态html文件，然后后端再修改为模板，这样是非常低效的，并且还常常需要前后端共同完成修改的动作； 或者是前端直接完成html模板，然后交由后端。另外，如果后端改了模板，前端还需要根据改动的模板再调节css，这样使得前后端联调的时间增加。
+2. 占用服务器端资源。即服务器端完成html模板的解析，如果请求较多，会对服务器造成一定的访问压力，这里的所有事情都交付给了服务器。
+
+### 客户端渲染
+
+客户端将服务端发送未处理的数据进行自行处理。
+
+![image-20200126182146611](images/image-20200126182146611.png)
+
+**优点：**
+
+1. 前后端分离。前端专注于UI，后端专注于api开发。
+2. 体验更好。比如我们使用异步方式获取数据，不影响用户的正常操作。首页面显示快。
+
+**缺点：**
+
+1. 前端响应较慢。如果是客户端渲染，前端还要进行拼接字符串的过程，需要耗费额外的时间，不如服务器端渲染速度快。
+2. 不利于SEO。目前比如百度、谷歌的爬虫对于SPA都是不认的，只是记录了一个页面，所以SEO很差。因为服务器端可能没有保存完整的html，而是前端通过js进行dom的拼接，那么爬虫无法爬取信息。 除非搜索引擎的seo可以增加对于JavaScript的爬取能力，这才能保证seo。
+
+### 如何选择？
+
+选择服务器渲染还是客户端渲染都是看指定的业务场景进行的。企业级网站，一些电商网站，主要功能是展示而没有复杂的交互，并且需要良好的SEO，比如京东的商品标题和内容则需要良号的SEO，则这时我们就需要使用服务器端渲染；而类似后台管理或者是个人隐私页面，交互性比较强，不需要seo的考虑，那么就可以使用客户端渲染。
+ 另外，具体使用何种渲染方法并不是绝对的，比如现在一些网站采用了首屏服务器端渲染，即对于用户最开始打开的那个页面采用的是服务器端渲染，这样就保证了渲染速度，而其他的页面采用客户端渲染，这样就完成了前后端分离。又比如电商网站是有两者的结合而成，比如京东的商品列表就采用了服务器渲染，目的是为了SEO搜索引擎优化，而它的商品评论列表为了用户的体验，而且不需要SEO搜索引擎优化，就采用了客户端渲染。
+

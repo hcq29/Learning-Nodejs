@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>01-在浏览器中使用art-template</title>
+</head>
+<body>
+    <!-- 在浏览器中引入lib/template-web.js文件，注意：模板引擎不关心字符串内容，只关心模板标记语法，比如{{}}，{{}}被称之为mustache语法，八字符语法-->
+    <script src="node_modules/art-template/lib/template-web.js"></script>
+    <!-- 将script的type类型规定为text/template，id为自定义 -->
+    <!-- 使用{{ }} 来替换相关数据 -->
+    <script type="text/template" id="tpl">
+        <p>hello {{ name }}</p>
+    </script>
+    <script>
+        //为对应的script绑定模板，添加对应的数据。
+        var ret = template('tpl', {
+            name: 'Jack'
+        });
+        console.log(ret);
+    </script>
+</body>
+</html>
