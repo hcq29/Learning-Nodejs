@@ -49,8 +49,7 @@ server.on('request', function (req, res) {
 
 function formatDate(shijianchuo) {
 
-    //时间戳是整数，否则要parseInt转换
-    var time = new Date(shijianchuo); // 需要使用Date格式进行日期转化，若是时间戳、字符串时间，需要通过new Date(..)转化
+    var time = new Date(shijianchuo); 
     var y = time.getFullYear();
     var m = time.getMonth() + 1;
     var d = time.getDate();

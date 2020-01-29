@@ -2,7 +2,7 @@
 
 > 官网:https://nodejs.org/en/
 >
-> <img src="images/image-20200112160531774.png" alt="image-20200112160531774" style="zoom: 50%;" />
+> ![](images/image-20200112160531774.png)
 
 **“Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine.”**
 
@@ -288,14 +288,14 @@ fs.writeFile('testFile.txt', '你们好！', function(error){
 
 `node writeFile.js`
 
-<img src="images/image-20200108203611790.png" alt="写入文件成功！" style="zoom: 67%;" />
+![](images/image-20200108203611790.png)
 
 **注意**
 
 -  尝试往一个不存在的文件写入内容，则首先创建文件后再写入。
 - 命名规定不允许包含某些关键符号，尝试向一个不合法的文件名写入内容，会写入失败。
 
-<img src="images/image-20200108205745285.png" alt="文件错误命名" style="zoom:80%;" />
+![](images/image-20200108205745285.png)
 
 ```js
 fs.writeFile('a>.txt', '你们好！', function(error){ //错误文件名
@@ -380,7 +380,7 @@ server.listen(3000, function(error){
 
 ![简单实现http服务器](images/image-20200108212844387.png)
 
-<img src="images/4E061CFC.png" alt="img" style="zoom: 80%;" />提示：当前服务正在等待状态，需要关闭服务的话按Ctrl+C即可。且两个服务不可以同时占用同一个端口。
+![](images/4E061CFC.png)提示：当前服务正在等待状态，需要关闭服务的话按Ctrl+C即可。且两个服务不可以同时占用同一个端口。
 
 ### 附加：端口号
 
@@ -416,7 +416,7 @@ server.listen(3000, function(error){
 
  因为我们的服务器的处理能力是很弱的，无论是什么路径的请求，返回的救过都是一样的。
 
-  <img src="images/4E015F9B.jpg" alt="img" style="zoom: 25%;" />**思考：怎样让我们的服务器处理不同的请求相应不同的结果呢？**
+  ![](images/4E015F9B.jpg)**思考：怎样让我们的服务器处理不同的请求相应不同的结果呢？**
 
   比如说：输入/（浏览器默认从/开始访问），这时候返回一个index
 
@@ -546,7 +546,7 @@ response.setHeader('Content-Type','text/html; charset=utf-8');
 response.setHeader('Content-Type','image/jpeg');
 ```
 
-<img src="images/image-20200112165144420.png" alt="image-20200112165144420" style="zoom:80%;" />  
+![](images/image-20200112165144420.png)
 
 字段值分类：
 
@@ -632,6 +632,8 @@ aaa
 如果b.js中没有使用exports进行导出的话，这时候拿到的就是一个空对象   ： `{}`
 
 如果有使用exports进行导出，把所有需要被外部访问到的成员挂载到exports对象中，它会动态地为这个对象添加成员。
+
+- 其中有一个目的是为了解决变量名的冲突的问题
 
 ```js
 var require = require('./b.js');
@@ -930,7 +932,7 @@ server.on('request', function(req, res){
 
 显示的效果如下：
 
-<img src="images/image-20200124150753902.png" alt="image-20200124150753902" style="zoom:50%;" />
+![](images/image-20200124150753902.png)
 
 遗留问题：这样的一个获取文件目录还只是获取了一层，对应的文件夹与文件还是有区别的，以及时间和大小依旧没有正确的获取，可自行尝试实现。
 
@@ -960,7 +962,40 @@ art-template 是一个简约、超快的**模板引擎**。
 npm install art-template --save
 ```
 
-<img src="images/image-20200124152102434.png" alt="image-20200124152102434" style="zoom:80%;" />
+![](images/image-20200124152102434.png)
+
+### 语法
+
+```html
+{{}}
+```
+
+```html
+{{each 数组}}
+	<li>{{ $value }}</li>
+{{/each}}
+```
+
+> 引入联想
+>
+> JavaScript中的 forEach 和 jQuery  中的 each 方法区别
+>
+> - forEach 是 ECMAScript 5 中的一种数组遍历的函数，是JavaScript 原生支持的遍历方法。`[].forEach(function(item, index){})`，Array.prototype 原型上具有的方法。但是对于ie8及以下版本不支持。
+>
+> - jQuery 中使用方式是 `$.each(数组, function(index, item){})` 和 `$('div').each(function(index, item){})`。一般用于遍历 jQuery  选择器选择到的伪数组实例对象。相对于 forEach 中的回调函数，参数相反。高版本 jQuery 不支持 ie8 及以下版本
+>   - 伪对象是对象
+>   - 对象的原型链中没有 forEach
+>   - 对象的原型链是 Object.prototype
+>   - jQuery 中获取伪对象后，原型链上具有each方法
+>   - jQuery 不是专门遍历 jQuery 元素的，但是可以做到。
+>     - 方便的遍历 jQuery 元素
+>     - 可以在不兼容forEach 的低版本浏览器中使用 JQuery 中的 each 方法。
+>
+> 在 jQuery 中使用 forEach 
+>
+> - `[].slice.call($('div')).forEach(function(item{}))`
+>
+> 
 
 ### 在浏览器中使用
 
@@ -1195,7 +1230,7 @@ function isZero(m) {
 
 最终效果
 
-<img src="images/image-20200126161520406.png" alt="image-20200126161520406" style="zoom: 67%;" />
+![](images/image-20200126161520406.png)
 
 >  本节小结：
 
@@ -1261,4 +1296,523 @@ html 仅仅作为静态文件，客户端端在请求时，服务端不做任何
 
 选择服务器渲染还是客户端渲染都是看指定的业务场景进行的。企业级网站，一些电商网站，主要功能是展示而没有复杂的交互，并且需要良好的SEO，比如京东的商品标题和内容则需要良号的SEO，则这时我们就需要使用服务器端渲染；而类似后台管理或者是个人隐私页面，交互性比较强，不需要seo的考虑，那么就可以使用客户端渲染。
  另外，具体使用何种渲染方法并不是绝对的，比如现在一些网站采用了首屏服务器端渲染，即对于用户最开始打开的那个页面采用的是服务器端渲染，这样就保证了渲染速度，而其他的页面采用客户端渲染，这样就完成了前后端分离。又比如电商网站是有两者的结合而成，比如京东的商品列表就采用了服务器渲染，目的是为了SEO搜索引擎优化，而它的商品评论列表为了用户的体验，而且不需要SEO搜索引擎优化，就采用了客户端渲染。
+
+
+
+## 实现简易留言板feedback
+
+### 前言
+
+浏览器收到响应内容后，就要开始从上到下依次解析，当在解析的过程中，如果发现：
+
+- link
+- script
+- img
+- iframe
+- video
+- audio
+- ......
+
+带有src或者href（link）属性标签（具有外链的资源）的时候，浏览器会自动对这些资源发起新的请求，如果我们只对一个页面资源进行处理的话，index.html中的外链资源则不可以请求到
+
+例如以下
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>留言板</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    你好
+    <img src="img/img.jpg">
+    <script src="js/main.js"></script>
+</body>
+</html>
+```
+
+```javascript
+var http = require('http');
+var fs = require('fs');
+//简写方式
+http.createServer(function(req, res){
+    var url = req.url;
+    if(url === '/'){
+        fs.readFile('./views/index.html', function(err, data){
+            if(err) return res.end('404 Not Found!');
+            res.end(data);
+        })
+    }
+}).listen(3000, function(error){
+    if(error) return console.log('error!');
+    console.log('running....');
+})
+```
+
+所显示的页面就会一直处在挂起的状态，其他的资源得不到加载权限。
+
+![image-20200127150503739](images/image-20200127150503739.png)
+
+### 处理网站中的静态资源
+
+为了方便统一处理资源，我们将所有的静态资源都放到public目录中，如以下的目录结构，目的是开放指定资源，有服务端进行控制。而相对于Apache来说，Apache会将所有资源暴露出来，而比较严密的Node则可以得到控制。
+
+![image-20200127190155625](images/image-20200127190155625.png)
+
+当访问到public目录下的资源时，就可以统一处理那些需要加载的资源了。通过`url.indexOf('/public/') === 0`进行判断，所请求的方式是：
+
+- /public/css/main.css
+- /publis/js/main.css
+- /publis/imgs/logo.png
+- /public/lib/jquery.js
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>留言板</title>
+    <!-- 
+		注意：在服务器中，文件中的路径不适用相对路径
+		因为这时候的所有文件资源都通过url标识来进行获取
+		在服务器中开放了  /public/ 目录
+		所以这里的请求路径都写成  /public/.....
+	-->
+    <link rel="stylesheet" href="/public/lib/jquery.js">
+    <link rel="stylesheet" href="/public/css/main.css">
+</head>
+<body>
+    你好
+    <img src="/public/imgs/logo.png">
+    <script src="/public/js/main.js"></script>
+</body>
+</html>
+```
+
+注意：
+
+- 在服务器中，文件中的路径不适用相对路径
+
+- 因为这时候的所有文件资源都通过url标识来进行获取
+
+- 在服务器中开放了  `/public/` 目录
+
+- 所以这里的请求路径都写成  `/public/.....`
+
+- `/`  指的是url根路径的意思
+
+- 发送请求时，浏览器真正发送请求的时候最终会在http://127.0.0.1:3000 后面进行拼接。例如Request URL: 
+
+  http://127.0.0.1:3000/public/css/main.css
+
+```javascript
+var http = require('http');
+var fs = require('fs');
+
+http.createServer(function(req, res){
+    var url = req.url;
+    if(url === '/'){
+        fs.readFile('./views/index.html', function(err, data){
+            if(err) return res.end('404 Not Found!');
+            res.end(data);
+        })
+    }else if(url.indexOf('/public/') === 0){
+        // 当访问到public目录下的资源时，就可以统一处理那些需要加载的资源了。通过`url.indexOf('/public/') === 0`进行判断，所请求的方式是：
+
+        //  /public/css/main.css
+        //  /publis/js/main.css
+        //  /publis/imgs/logo.png
+        //  /public/lib/jquery.js
+        // 使用readFile时必须加上  .  
+        fs.readFile('.' + url, function(err, data){
+            if(err) return res.end('404 Not Found!');
+            res.end(data)
+        });
+    }else{
+        fs.readFile('./views/404.html',function(err, data){
+            if(err) return res.end('404 Not Found!');
+            res.end(data);
+        })
+    }
+}).listen(3000, function(error){
+    if(error) return console.log('error!');
+    console.log('running....');
+})
+```
+
+![image-20200127153347509](images/image-20200127153347509.png)
+
+### 渲染首页
+
+在需要请求的地方，我们将之写入url地址，写入基本样式，并使用art-template模板引擎
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>留言板</title>
+    <link rel="stylesheet" href="/public/lib/bootstrap/css/bootstrap.css">
+</head>
+<body>
+    <div class="header container">
+        <div class="page-header">
+            <h1>留言列表  <small>反馈留言板</small></h1>
+            <a class="btn btn-success" href="/post">发表留言</a>
+        </div>
+    </div>
+    <div class="comments container">
+        <ul class="list-group">
+            {{each comments}}
+            <li class="list-group-item">{{$value.name}}说：{{$value.message}}<span class="pull-right">{{$value.dateTime}}</span></li>
+            {{/each}}
+        </ul>
+    </div>
+</body>
+</html>
+```
+
+### 功能处理
+
+在app.js中判断各类url的情况处理
+
+- 首页：路径为 `/`
+  - 读取用户留言信息user.json文件，将之赋予comments数组
+  - 读取index.html文件，并将user.json文件的数据替换并展现到页面中
+- 以 `/public/` 开头的url
+  - 读取相应路径的文件，并返回结果
+- 发表留言页面： 路径为`/post`
+  - 读取views下的post.html，并返回页面
+- 带有参数的提交  `/commit`
+  - 首先将url中的query对象获取
+  - 设置当前用户信息和留言内容
+  - 将新的数组对象写入user.json文件当中
+  - 向客户端返回状态码302（表示重定向）
+  - 设置头部信息中的Location到根路径`/`，即可返回到首页
+  - 返回结束，看到首页新留言列表
+- 其余请求路径
+  - 输出404.html页面
+
+
+
+>  301表示永久重定向  浏览器会记住上一次的行为
+>
+> - 比如需要访问 a.com 网站被重定向到了 b.com
+> - 后续对于输入 a.com 时浏览器不会请求a.com了
+> - 直接跳转到b.com网站。
+>
+> 302 表示临时性重定向  而浏览器不记忆
+>
+> - 比如需要访问 a.com 网站被重定向到了 b.com
+> - 后续对于输入 a.com 时浏览器先请求a.com
+> - 如果需要还需要跳转，则跳转。
+
+另外，使用url模块可以使一个url进行解析
+
+```javascript
+var reqUrl = 'http://127.0.0.1:3000?name=张三&message=大家新年好啊！';
+console.log(url.parse(reqUrl, true));
+```
+
+结果会被解析成
+
+```bash
+Url {
+  protocol: 'http:',
+  slashes: true,
+  auth: null,
+  host: '127.0.0.1:3000',
+  port: '3000',
+  hostname: '127.0.0.1',
+  hash: null,
+  search: '?name=张三&message=大家新年好啊！',
+  query: [Object: null prototype] { name: '张三', message: '大家新年好啊！' },
+  pathname: '/',
+  path: '/?name=张三&message=大家新年好啊！',
+  href: 'http://127.0.0.1:3000/?name=张三&message=大家新年好啊！'
+}
+```
+
+因此其中的query可以获取到传入的参数。（与split方法类似）。
+
+完整app.js
+
+```javascript
+var http = require('http');
+var fs = require('fs');
+var url = require('url');
+var template = require('art-template');
+
+var comments = [];
+
+http.createServer(function (req, res) {
+    var parseObj = url.parse(req.url, true);
+    var pathName = parseObj.pathname;
+    if (pathName === '/') {
+        fs.readFile('./views/user.json', function (err, data) {
+            if (err) return console.log('error');
+            var data = JSON.parse(data);
+            comments = data;
+        })
+        fs.readFile('./views/index.html', function (err, data) {
+            if (err) return res.end('404 Not Found!');
+            var result = template.render(data.toString(), {
+                comments: comments
+            })
+            res.end(result);
+        })
+    } else if (pathName.indexOf('/public/') === 0) {
+        fs.readFile('.' + pathName, function (err, data) {
+            if (err) return res.end('404 Not Found!');
+            res.end(data);
+        });
+    } else if (pathName === '/post') {
+        fs.readFile('./views/post.html', function (err, data) {
+            if (err) return res.end('404 Not Found!');
+            res.end(data);
+        })
+    } else if (pathName === '/commit') {
+        var comment = parseObj.query;
+        comment.dateTime = formatDate(new Date());
+        comments.push(comment);
+        var commentStr = JSON.stringify(comments);
+        fs.writeFile('./views/user.json', commentStr, function (err) {
+            if (err) return console.log('error!');
+            console.log('记录成功！');
+        })
+        res.statusCode = 302;
+        res.setHeader('Location', '/');
+        res.end();
+    } else {
+        fs.readFile('./views/404.html', function (err, data) {
+            if (err) return res.end('404 Not Found!');
+            res.end(data);
+        })
+    }
+}).listen(3000, function (error) {
+    if (error) return console.log('error!');
+    console.log('running....');
+})
+
+function formatDate(date) {
+
+    var y = date.getFullYear();
+    var m = date.getMonth() + 1;
+    var d = date.getDate();
+    var h = date.getHours();
+    var mm = date.getMinutes();
+    var s = date.getSeconds();
+    return y + '/' + isZero(m) + '/' + isZero(d) + ' ' + isZero(h) + ':' + isZero(mm) + ':' + isZero(s);
+}
+function isZero(m) {
+    return m < 10 ? '0' + m : m
+}
+```
+
+完整post页面
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>发表留言</title>
+    <link rel="stylesheet" href="/public/lib/bootstrap/css/bootstrap.css">
+</head>
+<body>
+    <div class="header container">
+        <div class="page-header">
+            <h1><a class="btn btn-success" href="/">首页</a><small>发表评论</small></h1>
+        </div>
+    </div>
+    <div class="comments container">
+        <form action="/commit" method="GET">
+            <div class="form-group">
+                <label for="input_name">你的名字</label>
+                <input type="text" class="form-control" required minlength="2" maxlength="10" id="input_name" name="name" placeholder="输入你的名字">
+            </div>
+            <div class="form-group">
+                <label for="textarea_message">留言内容</label>
+                <textarea type="text" class="form-control" required minlength="5" maxlength="520" id="textarea_message" name="message"></textarea>
+            </div>
+            <button type="submit" class="btn btn-default">发表</button>
+        </form>
+    </div>
+</body>
+</html>
+```
+
+最终显示的效果
+
+![image-20200127195925706](images/image-20200127195925706.png)
+
+![image-20200127195955086](images/image-20200127195955086.png)
+
+![image-20200127200013002](images/image-20200127200013002.png)
+
+## Node中的模块系统
+
+之前我们提到了，自定义模块的加载，我们可以通过require()方法进行引入，通过exports进行接口对象的导出，exports是一个对象，我们可以通过多次为这个对象添加成员实现对外导出多个内部成员。
+
+### 什么是模块化？
+
+- 文件作用域
+- 通信规则
+  - 加载（比如 require）
+  - 导出
+
+### CommonJs模块规范
+
+在Node中的JavaScript有一个重要的概念叫做模块系统
+
+- 模块作用域
+- 使用require 方法来加载模块
+
+- 使用 exports 接口对象来导出模块中的成员
+
+#### 加载模块 `require`
+
+语法
+
+```javascript
+var 自定义模块名称 = require('模块');
+```
+
+两个作用：
+
+1. 执行被夹在模块中的代码
+2. 拿到被夹在模块中的 `exports` 导出接口对象
+
+#### 导出对象`exports`
+
+- Node中是模块作用域，默认文件中的所有成员只在当前文件模块中有效
+- 对于希望可以被其它模块访问的成员，我们就需要把这些公开的成员都挂在到 `exports`接口对象中
+
+导出多个成员（对象）：
+
+```javascript
+exports.a = 123;
+exports.b = 'abc';
+exports.c = function(){
+    console.log('c');
+};
+exports.d = {
+    name: 'Jack'
+};
+```
+
+导出单个成员（拿到的就是函数、字符串或者是数组等等）：
+
+而现在所得到的是exports这个对象，如果需要加载得到的就是想要的内容，那么直接赋值是不能实现的。应该使用的是以下的方式，注意：后者导出的内容会覆盖
+
+```javascript
+function add(x, y){
+    return x + y;
+}
+
+// exports.add = add;
+// exports是一个对象
+// 我们可以通过多次为这个对象添加成员实现对外导出多个内部成员
+
+// 如果希望我们在外部直接拿到的不是一个对象，可以是
+// 方法
+// 字符串
+// 数字
+// 数组
+
+// 如果一个模块需要直接导出某个成员，而非挂载的方式，这时候使用以下方法实现
+module.exports = add;
+
+module.exports = 'Jack';
+```
+
+rAdd则是得到对应的外部成员
+
+```javascript
+var rAdd = require('./b.js');
+console.log(rAdd(1,2));
+```
+
+![image-20200129172230530](images/image-20200129172230530.png)
+
+也可通过这种方法导出多个对象
+
+```javascript
+module.exports = {
+    name: 'Jack',
+    add: function(x, y){
+        return x + y;
+    }
+};
+```
+
+#### 原理说明（exports和module.exports的区别）
+
+`exports`是`module.exports`的一个引用，为了方便导出，Node中使用`module.exports`进行导出的话，太过冗余，所以使用`exports`来简化写法。引用固然不可以直接赋值进行导出，因为直接赋值则最终的成员就不在`module.exports`上。模块中最终return的是`module.exports`而不是`exports`。
+
+```javascript
+module.exports.name = 'Jack';
+module.exports.add = function(x, y){
+    return x + y;
+};
+
+// 底层内容
+var module = {
+    exports: {
+        name: 'Jack',
+        add: function(x, y){
+            return x + y;
+        }
+    }
+}
+
+// 模块中有这么一句
+var exports = module.exports;
+```
+
+
+
+```javascript
+console.log(exports === module.exports) //=>true
+
+exports.foo = 'bar';
+//等价于
+module.exports.foo = 'bar';
+```
+
+
+
+> exports赋值后exports无效，之前在exports身上添加的成员有效，但不影响module.exports，module.exports赋值则后续的导出无效。
+>
+> ```javascript
+> exports.name = 'Jack';
+> exports = {};
+> exports.add = function(x, y){return x + y;};  //导出无效
+> ```
+>
+> ```javascript
+> module.exports.name = 'Jack';  //无效
+> function add(x, y){return x + y;};
+> module.exports = add;
+> exports.name = 'Jack'; //引用断开，无效
+> ```
+
+
+
+## Express
+
+- Express就是第三方 Web 开发框架
+- 高度封装了 http 模块
+- 提高编码效率，更加专注于业务，而非底层细节
 

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>留言板</title>
+    <link rel="stylesheet" href="/public/lib/bootstrap/css/bootstrap.css">
+</head>
+<body>
+    <div class="header container">
+        <div class="page-header">
+            <h1>留言列表  <small>反馈留言板</small></h1>
+            <a class="btn btn-success" href="/post">发表留言</a>
+        </div>
+    </div>
+    <div class="comments container">
+        <ul class="list-group">
+            {{each comments}}
+            <li class="list-group-item">{{$value.name}}：{{$value.message}}<span class="pull-right">{{$value.dateTime}}</span></li>
+            {{/each}}
+        </ul>
+    </div>
+</body>
+</html>
