@@ -193,6 +193,25 @@ console.log(name);
 
 ![尝试输出window和document出错](images/image-20200108154313311.png)
 
+## 快捷自动重启服务工具
+
+使用一个第三方工具， `nodemon` 可以帮助我们解决平凡修改代码重启服务器问题，`nodemon`是一个基于Node.js开发的第三方命令行工具，可通过以下命令进行安装
+
+```bash
+npm install --global nodemon
+```
+
+安装完毕之后，可以使用：
+
+```bash
+node app.js
+
+# 使用nodemon
+nodemon app.js
+```
+
+通过nodemon启动的服务，可以监视文件变化，当文件发生变化的时候，自动帮助你重启服务。
+
 # 实践与理解
 
 ## 读取文件
@@ -1830,6 +1849,10 @@ module.exports.foo = 'bar';
   - 模块名
 - 自定义模块
   - 路径
+    - `./xxx`（当前路径）
+    - `../xxx`（上一级路径）
+    - `/xxx`（当前文件模块所属磁盘根路径）
+    - `C:/xxx`（绝对路径）
 
 首先会从缓存中加载，观察一下例子，有三个文件，main.js ， a.js 和 b.js
 
@@ -1948,7 +1971,7 @@ Fast, unopinionated, minimalist web framework for [Node.js](https://nodejs.org/e
 - 高度封装了 http 模块
 - 提高编码效率，更加专注于业务，而非底层细节。
 
-### 下载安装
+### 安装
 
 假设您已经安装了Node.js），那么创建一个目录来保存您的应用程序，并使其成为您的工作目录。
 
@@ -1983,7 +2006,7 @@ npm install express --save
 npm install express --no-save
 ```
 
-### 使用
+### Hello World
 
 app.js 中写入以下代码就可开启服务。
 
@@ -2005,11 +2028,143 @@ app.get('/', (req, res) => res.send('Hello World!'));
 
 这句话的意思是，当请求 `/`的时候，返回一个字符串： `Hello world`。
 
-那我们就可以很方便地处理其他url情况了，还可以通过以下方式将指定目录给开放出去。
+### 基本路由
+
+路由器就是一张表，表里边有具体的映射关系
+
+上述的get方法，可以提取成以下的结构：
 
 ```javascript
-// 公开指定目录
-app.use('/public/', express.static('./public/'));
+app
+  .get('/', function(){})
+  .get('/login', function(){})
+  .post('/a', function(){})
+  .post('/b', function(){})
+```
+
+路由组成部分：
+
+- 请求方法
+- 请求路径
+- 请求处理
+
+### 静态资源
+
+通过以下方式将指定目录给开放出去。
+
+```javascript
+// 公开指定目录（建议使用这种形式，更符合语义）
+app.use('/public/', express.static('./public/'));// 访问的路径是： http://127.0.0.1:3000/public/js/main.js  
+
+// 可以省略第一个参数
+app.use(express.static('public'));
+app.use(express.static('./public/'));  // 访问的路径是： http://127.0.0.1:3000/js/main.js
 ```
 
 可见在Express下变得很简单了。
+
+### 在Express中使用art-template
+
+- [art-template官方文档](https://github.com/aui/express-art-template)
+
+#### 安装
+
+```bash
+npm install --save art-template
+npm install --save express-art-template
+```
+
+#### 配置
+
+```JavaScript
+var express = require('express');
+var app = express();
+```
+
+```javascript
+// 参数 ‘art’，表示的是当渲染以 .art 结尾的文件的时候，使用 art-template 模板引擎
+// express-art-template 是用来在 Express 中把 art-template 整合到 Express中
+// express-art-template 依赖 art-template
+app.engine('art', require('express-art-template'));
+// render函数的默认路径
+app.set('view options', {
+    debug: process.env.NODE_ENV !== 'production'
+});
+
+
+// 当然我们可以换掉第一个参数
+app.engine('html', require('express-art-template'));
+```
+
+#### 使用
+
+```javascript
+app.engine('html', require('express-art-template'));
+app.get('/', function (req, res) {
+    // 第一个参数不能磁轭路径，默认会去项目中的 views 目录查找该文件模块
+    // views 放置的都是与视图有关的文件，可供渲染
+    res.render('index.html', {
+        title: 'Hello'
+    });
+});
+```
+
+### 使用Express重写留言板
+
+```javascript
+const express = require('express');
+const app = express();
+const port = 3000;
+var fs = require('fs');
+app.engine('html', require('express-art-template'));
+
+app.use('/public/', express.static('./public/'));
+
+var comments = [];
+app.get('/', (req, res) => {
+    fs.readFile('./views/user.json', function (err, data) {
+        if (err) return console.log('error');
+        var data = JSON.parse(data);
+        comments = data;
+    })
+    res.render('index.html', {
+        comments: comments
+    });
+})
+
+app.get('/post', (req, res) => {
+    res.render('post.html');
+})
+
+app.get('/commit', (req, res) => {
+    var comment = req.query;
+    comment.dateTime = formatDate(new Date());
+    comments.push(comment);
+    var commentStr = JSON.stringify(comments);
+    fs.writeFile('./views/user.json', commentStr, function (err) {
+        if (err) return console.log('error!');
+        console.log('记录成功！');
+    })
+    res.redirect('/');  // 替换简单
+})
+
+app.listen(port, function (error) {
+    if (error) return console.log('error!');
+    console.log('running....');
+})
+
+function formatDate(date) {
+
+    var y = date.getFullYear();
+    var m = date.getMonth() + 1;
+    var d = date.getDate();
+    var h = date.getHours();
+    var mm = date.getMinutes();
+    var s = date.getSeconds();
+    return y + '/' + isZero(m) + '/' + isZero(d) + ' ' + isZero(h) + ':' + isZero(mm) + ':' + isZero(s);
+}
+function isZero(m) {
+    return m < 10 ? '0' + m : m
+}
+```
+

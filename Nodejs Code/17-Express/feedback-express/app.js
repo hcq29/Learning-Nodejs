@@ -2,33 +2,24 @@ const express = require('express');
 const app = express();
 const port = 3000;
 var fs = require('fs');
-var template = require('art-template');
-
-var comments = [];
+app.engine('html', require('express-art-template'));
 
 app.use('/public/', express.static('./public/'));
 
+var comments = [];
 app.get('/', (req, res) => {
     fs.readFile('./views/user.json', function (err, data) {
         if (err) return console.log('error');
         var data = JSON.parse(data);
         comments = data;
     })
-    fs.readFile('./views/index.html', function (err, data) {
-        if (err) return res.end('404 Not Found!');
-        var result = template.render(data.toString(), {
-            comments: comments
-        })
-        res.end(result);
-    })
+    res.render('index.html', {
+        comments: comments
+    });
 })
 
 app.get('/post', (req, res) => {
-   
-    fs.readFile('./views/post.html', function (err, data) {
-        if (err) return res.end('404 Not Found!');
-        res.end(data);
-    })
+    res.render('post.html');
 })
 
 app.get('/commit', (req, res) => {
@@ -40,12 +31,8 @@ app.get('/commit', (req, res) => {
         if (err) return console.log('error!');
         console.log('记录成功！');
     })
-    res.statusCode = 302;
-    res.setHeader('Location', '/');
-    res.end();
+    res.redirect('/');  // 替换简单
 })
-
-
 
 app.listen(port, function (error) {
     if (error) return console.log('error!');
