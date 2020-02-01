@@ -1,3 +1,5 @@
+
+
 # 什么是node.js
 
 > 官网:https://nodejs.org/en/
@@ -21,7 +23,7 @@
 **“ Node.js package ecosystem, npm, is the largest ecosystem of open source libraries in the world. ”**
 - npm是世界上最大的开源库生态系统
 - 绝大多数JavaScript相关的包都存放在了npm上，这样做的目的是为了让开发人员更方便的去下载使用。
-- ```npm install jquery```
+- ```npm install jquery --save```
 
 # 浏览器中的JavaScript
 
@@ -190,6 +192,8 @@ console.log(name);
 在node中，采用的是ECMAScript进行编码，所以没有DOM和BOM，就不存在window和document，尝试输出window和document会显示不存在。和浏览器中的JavaScript不一样
 
 ![尝试输出window和document出错](images/image-20200108154313311.png)
+
+# 实践与理解
 
 ## 读取文件
 
@@ -584,9 +588,11 @@ var http = require('http');
 
 - 具名的核心模块，例如 fs 、 http、os...
 - 用户编写的文件模块，注意：相对路径必须加上  `./`
-- Node不具有全局作用域，只有模块作用域
-  - 外部访问不到内部
-  - 内部访问不到外部
+- 第三方模块，可通过`npm install xxx --save`进行下载，比如art-template。
+
+Node不具有全局作用域，只有模块作用域
+- 外部访问不到内部
+- 内部访问不到外部
 
 这里举一个例子：
 
@@ -1037,7 +1043,7 @@ npm install art-template --save
 
 ### 在Node.js中使用
 
-1. 下载安装：`npm install art-template`
+1. 下载安装：`npm install art-template --save`
 2. 在需要的文件模块中加载 `art-template`
    1. 使用`require` 方法加载：`require('art-template')`
 3. 查看相关文档中的AIP使用
@@ -1663,6 +1669,14 @@ function isZero(m) {
 
 ## Node中的模块系统
 
+> 可阅读书籍：
+>
+> - 《深入浅出Nodejs》 中的模块系统
+>
+> - 其他： https://www.infoq.cn/article/nodejs-module-mechanism/
+
+
+
 之前我们提到了，自定义模块的加载，我们可以通过require()方法进行引入，通过exports进行接口对象的导出，exports是一个对象，我们可以通过多次为这个对象添加成员实现对外导出多个内部成员。
 
 ### 什么是模块化？
@@ -1808,11 +1822,194 @@ module.exports.foo = 'bar';
 > exports.name = 'Jack'; //引用断开，无效
 > ```
 
+#### require 方法加载规则
+
+- 核心模块
+  - 模块名
+- 第三方模块
+  - 模块名
+- 自定义模块
+  - 路径
+
+首先会从缓存中加载，观察一下例子，有三个文件，main.js ， a.js 和 b.js
+
+![image-20200201165518770](images/image-20200201165518770.png)
+
+在main.js中，对a 和 b 分别进行了加载， 而 a 中也对 b 进行了加载，但是只显示了一次  `b.js被加载了`
+
+说明由于在 a 中已经对 b 进行加载过了，所以在 main.js 中不会重复去加载 b 了，只会去拿到 b 中的接口对象，但不会重复执行里面的代码。这就是**优先从缓存中加载**，这样做的好处就是避免重复加载，提高模块加载效率。
+
+#### 第三方模块
+
+Node中提供了三种模块：
+
+- 具名的核心模块，例如 fs 、 http、os...
+- 用户编写的文件模块，注意：相对路径必须加上  `./`
+- 第三方模块，可通过`npm install xxx --save`进行下载，比如art-template。
+
+其中的第三方模块的加载原理是这样的，以art-template举例
+
+- 先找到当前文件所处目录中的 node_modules 目录
+- node_modules/art-template
+- node_modules/art-template/package.json 文件
+- node_modules/art-template/package.json 文件中的 main 属性（main属性没有指定，则去默认的 index.js 文件）
+- main 属性中记录了 art-template 的入口模块
+- 然后加载使用这个第三方包（实际上就是加载文件）
+
+（如果以上条件都不成立，则进入上一级目录查找，如果还是没有，一直往上，如果当前磁盘根路径目录都没有找到，最后就会报错。所以开发过程中，我们会将node_modules 目录放在根目录，让每一个模块都能够访问到）
+
+#### 模块查找机制
+
+- 优先从缓存加载
+- 核心模块
+- 路径形式的文件模块
+- 第三方模块
+
+## 包管理
+
+### npm
+
+我们通常会使用 npm 进行包的加载。
+
+- npm网站： npmjs.com（我们下载的东西都是从这里下载的）
+
+npm是一个命令行工具，随着node的暗转，就自动安装了npm
+
+#### 常用命令
+
+> - npm init
+>   - npm init -y 可以跳转导向，快速生成
+>
+> - npm install
+>   - 一次性把 dependencies 选项中的依赖项全部安装
+>   - npm  i  （简写）
+>
+> - npm install xxx
+>   - 只下载
+>   - npm  i  xxx（简写）
+>
+> - npm install xxx --save（或者  npm install --save xxx）
+>   - 下载并且保存依赖项（package-lock.json文件的dependencies 选项）
+>   - npm i -S xxx（简写）
+> - npm uninstall xxx
+>   - 删除包，依赖项不变
+>   - npm un xxx（缩写）
+> - npm uninstall xxx --save（或者 npm uninstall --save xxx）
+>   - 删除包，并删除依赖项
+>   - npm un -S xxx（简写）
+> - npm --help
+>   - 查看使用帮助
+> - npm 命令 --help
+>   - 查看指定命令 的使用帮助
+>
+> .....
+>
+> .....
+>
+> 网上有很多相关的技术总结文章，这里就不多说了，也可通过 `npm --help` 进行查询帮助。
+
+#### npm速度慢
+
+有时候，我们在下载的时候会特别慢，因为npm存储包文件的服务器是在国外的，所以我们可以下载安装淘宝的cnpm，这时候就会使用淘宝的服务器进行下载，速度会快一些。淘宝镜像：http://npm.taobao.org/。
+
+```bash
+npm install --global cnpm
+```
+
+### package.json
+
+在使用npm的时候，我们注意到后面有一个 `--save` ，如果我们在开发的过程中，突然 mode_modules 包不见了，这时候不知道我们的项目到底依赖了哪些包，这时候，`--save`的作用就出来了，它在下载的时候，会自动地在当前目录下生成一个 `package.json` 文件 ，就是包文件描述文件
+
+```bash
+npm install -y
+npm install jquery --save
+```
+
+`package.json` 文件中就会有一个`dependencies` 的属性，它的意思是依赖，表示我们导入了哪些重要的文件包。其中就有jquery的相关信息。
+
+```javascript
+"dependencies": {
+    "jquery": "^3.4.11"
+}
+```
+
 
 
 ## Express
+### 介绍
+
+Fast, unopinionated, minimalist web framework for [Node.js](https://nodejs.org/en/) （用于Node.js的快速、开源的、极简web框架）
+
+官方网站： http://expressjs.com/
+
+因为原生 http 在某些方面表现不足，以无法应对我们的开发需求，所以我们就需要使用框架来加快我们的开发效率。
 
 - Express就是第三方 Web 开发框架
 - 高度封装了 http 模块
-- 提高编码效率，更加专注于业务，而非底层细节
+- 提高编码效率，更加专注于业务，而非底层细节。
 
+### 下载安装
+
+假设您已经安装了Node.js），那么创建一个目录来保存您的应用程序，并使其成为您的工作目录。
+
+```sh
+mkdir myapp
+cd myapp
+```
+
+使用`npm init`命令为应用程序创建“package.json”文件。有关“package.json”如何工作的更多信息，请参见[npm的package.json处理的细节](https://docs.npmjs.com/files/package.json)。
+
+```sh
+npm init
+```
+
+此命令提示您输入许多内容，例如应用程序的名称和版本。现在，您只需单击RETURN接受大多数默认值，但以下情况除外：
+
+```sh
+entry point: (index.js)
+```
+
+输入`app.js`，或者输入主文件名。如果希望它是`index.js`，请按RETURN接受建议的默认文件名。
+
+现在在`myapp`目录中安装Express并将其保存在依赖项列表中。例如：
+
+```sh
+npm install express --save
+```
+
+要临时安装Express而不将其添加到依赖项列表中，可执行以下操作：
+
+```sh
+npm install express --no-save
+```
+
+### 使用
+
+app.js 中写入以下代码就可开启服务。
+
+```javascript
+const express = require('express')
+const app = express()
+const port = 3000
+
+app.get('/', (req, res) => res.send('Hello World!'))
+
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+```
+
+其中有一个非常熟悉的语句
+
+```javascript
+app.get('/', (req, res) => res.send('Hello World!'));
+```
+
+这句话的意思是，当请求 `/`的时候，返回一个字符串： `Hello world`。
+
+那我们就可以很方便地处理其他url情况了，还可以通过以下方式将指定目录给开放出去。
+
+```javascript
+// 公开指定目录
+app.use('/public/', express.static('./public/'));
+```
+
+可见在Express下变得很简单了。
