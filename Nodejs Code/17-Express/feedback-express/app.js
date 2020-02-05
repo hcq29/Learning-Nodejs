@@ -1,10 +1,16 @@
 const express = require('express');
+var bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 var fs = require('fs');
 app.engine('html', require('express-art-template'));
 
 app.use('/public/', express.static('./public/'));
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// parse application/json
+app.use(bodyParser.json());
 
 var comments = [];
 app.get('/', (req, res) => {
@@ -22,8 +28,8 @@ app.get('/post', (req, res) => {
     res.render('post.html');
 })
 
-app.get('/commit', (req, res) => {
-    var comment = req.query;
+app.post('/post', (req, res)=>{
+    var comment = req.body;
     comment.dateTime = formatDate(new Date());
     comments.push(comment);
     var commentStr = JSON.stringify(comments);

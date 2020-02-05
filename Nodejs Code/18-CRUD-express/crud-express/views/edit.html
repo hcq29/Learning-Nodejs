@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>编辑学生信息</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/public/css/main.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">学生管理系统</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">仪表板</a></li>
+                    <li><a href="#">设置</a></li>
+                    <li><a href="#">简况</a></li>
+                    <li><a href="#">帮助</a></li>
+                </ul>
+                <form class="navbar-form navbar-right">
+                    <input type="text" class="form-control" placeholder="搜索...">
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <ul class="nav nav-sidebar">
+                    <li class="active"><a href="#">概述 <span class="sr-only">(当前)</span></a></li>
+                    <li><a href="#">报告</a></li>
+                    <li><a href="#">分析</a></li>
+                    <li><a href="#">导出</a></li>
+                </ul>
+                <ul class="nav nav-sidebar">
+                    <li><a href="">导航栏</a></li>
+                    <li><a href="">Nav item again</a></li>
+                    <li><a href="">One more nav</a></li>
+                    <li><a href="">Another nav item</a></li>
+                    <li><a href="">More navigation</a></li>
+                </ul>
+                <ul class="nav nav-sidebar">
+                    <li><a href="">Nav item again</a></li>
+                    <li><a href="">One more nav</a></li>
+                    <li><a href="">Another nav item</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <h2 class="sub-header">添加学生</h2>
+                <form action="/students/edit" method="POST">
+                    <input type="hidden" name="id" value="{{ student.id }}">
+                    <div class="form-group">
+                        <label for="name">姓名</label>
+                        <input type="text" name="name" class="form-control" id="name" placeholder="姓名" value="{{ student.name }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">性别</label>
+                        <div>
+                            <label class="radio-inline">
+                                <input type="radio" name="gender" id="man" value="0" {{if student.gender == 0}} checked {{/if}}> 男
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="gender" id="woman" value="1" {{if student.gender == 1}} checked {{/if}}> 女
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">年龄</label>
+                        <input type="number" class="form-control" id="age" name="age" value="{{ student.age }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="hobbies">爱好</label>
+                        <textarea type="text" class="form-control" id="hobbies" name="hobbies">{{ student.hobbies }}</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-default">提交</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/node_modules/jquery/dist/jquery.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="/public/js/holder.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/public/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+
+</html>
