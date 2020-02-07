@@ -1,6 +1,16 @@
-# 后台管理系统（增删改查）——CRUD by Express
+# 后台管理系统（文件式增删改查）——CRUD by Express
 
 ## 下载运行
+
+```bash
+git clone https://github.com/hcq29/Learning-Node.js.git
+cd Learning-Node.js
+git checkout crud
+```
+
+```bash
+node app.js
+```
 
 
 
@@ -298,7 +308,6 @@ function fn(callback){
 fn(function(data){
 	console.log(data);
 })
-
 ```
 
 
@@ -362,13 +371,17 @@ exports.delete = function (id, callback) {
 
 ```
 
-源代码请查看:：[https://github.com/hcq29/Learning-Node.js/tree/master/Nodejs%20Code/18-CRUD-express/crud-express](https://github.com/hcq29/Learning-Node.js/tree/master/Nodejs%20Code/18-CRUD-express/crud-express)
+源代码请查看:：[https://github.com/hcq29/Learning-Node.js/tree/crud](https://github.com/hcq29/Learning-Node.js/tree/crud)
 
 具体效果：
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200207113614166.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjMzOTE5Nw==,size_16,color_FFFFFF,t_70)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200207113650734.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjMzOTE5Nw==,size_16,color_FFFFFF,t_70)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200207113632978.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MjMzOTE5Nw==,size_16,color_FFFFFF,t_70)
+![20200207113614166](images/20200207113614166.png)
+
+![20200207113650734](images/20200207113650734.png)
+
+![20200207113632978](images/20200207113632978.png)
+
+
 
 
 
