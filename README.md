@@ -2540,6 +2540,20 @@ app.listen(port, (error)=>{
 
 一般情况下，将函数作为参数就是为了获取函数内部的异步操作的结果
 
+```javascript
+function fn(callback){
+	// var callback = function(data) { console.log(data)}
+	setTimeout(function(){
+		var data = 'hello';
+		callback(data);
+	},1000)
+}
+// 如果需要获取一个函数中异步操作的结果，则必须通过回调函数来获取
+fn(function(data){
+	console.log(data);
+})
+```
+
 
 
 ```javascript
@@ -2602,7 +2616,7 @@ exports.delete = function (id, callback) {
 
 ```
 
-源代码请查看:：[https://github.com/hcq29/Learning-Node.js/tree/master/Nodejs%20Code/18-CRUD-express/crud-express](https://github.com/hcq29/Learning-Node.js/tree/master/Nodejs%20Code/18-CRUD-express/crud-express)
+源代码请查看:：[https://github.com/hcq29/Learning-Node.js/tree/crud](https://github.com/hcq29/Learning-Node.js/tree/crud)
 
 
 
