@@ -2540,7 +2540,7 @@ app.listen(port, (error)=>{
 
 一般情况下，将函数作为参数就是为了获取函数内部的异步操作的结果
 
-![image-20200204213320401](images/image-20200204213320401.png)
+
 
 ```javascript
 /**
