@@ -1,3 +1,5 @@
+[TOC]
+
 
 
 # 什么是node.js
@@ -1707,25 +1709,19 @@ JavaScript 天生不支持模块化
 
 无论是 CommonJS、AMD、CMD、UMD、EcmaScript 6 Modules 官方规范
 * 都是为了解决 JavaScript 的模块化问题
-* CommonJS、AMD、CMD 都是民间搞出来的
 * EcmaScript 是官方规范定义
-* 官方看民间都在乱搞，开发人员为了在不同的环境使用不同的 JavaScript 模块化解决方案
-* 所以 EcmaScript 在 2015 年发布了 EcmaScript 2016 官方标准
-* 其中就包含了官方对 JavaScript 模块化的支持
-* 也就是说语言天生就支持了
-* 但是虽然标准已经发布了，但是很多 JavaScript 运行换将还不支持
 * Node 也是只在 8.5 版本之后才对 EcmaScript 6 module 进行了支持
-* 后面学 Vue 的时候会去学习
 * less 编译器 > css
 * EcmaScript 6 -> 编译器 -> EcmaScript 5
 * 目前的前端情况都是使用很多新技术，然后利用编译器工具打包可以在低版本浏览器运行。
 * 使用新技术的目的就是为了提高效率，增加可维护性
 
+
+
 > 可阅读书籍：
 >
 > - 《深入浅出Nodejs》 中的模块系统
->
-> - 其他： https://www.infoq.cn/article/nodejs-module-mechanism/
+>- 其他： https://www.infoq.cn/article/nodejs-module-mechanism/
 
 
 
@@ -2620,56 +2616,420 @@ exports.delete = function (id, callback) {
 
 
 
-find和findIndex的源码
+#### find和findIndex的源码
+
+理解回调函数，尝试编写find和findIndex
 
 ```javascript
-// EcmaScript 6 对数组新增了很多方法
-//    find
-//    findIndex
+// EcmaScript 6 新增了很多新的方法
+// find
+// findIndex
 
-// find 接收一个方法作为参数，方法内部返回一个条件
-// find 会遍历所有的元素，执行你给定的带有条件返回值的函数
-// 符合该条件的元素会作为 find 方法的返回值
-// 如果遍历结束还没有符合该条件的元素，则返回 undefined
+// find  和 findIndex 接收一个方法作为参数，方法内部返回一个条件
+// find  和 findIndex 会遍历所有的元素，执行给定的带有条件返回的函数
+// 符合该条件的元素就会作为 find 和 findIndex 方法的返回值
 
 var users = [
-  {id: 1, name: '张三'},
-  {id: 2, name: '张三'},
-  {id: 3, name: '张三'},
-  {id: 4, name: '张三'}
+    {id: 0, name: '小明'},
+    {id: 1, name: '小明'},
+    {id: 2, name: '小明'},
+    {id: 3, name: '小红'}
 ]
 
-Array.prototype.myFind = function (conditionFunc) {
-  // var conditionFunc = function (item, index) { return item.id === 4 }
-  for (var i = 0; i < this.length; i++) {
-    if (conditionFunc(this[i], i)) {
-      return this[i]
+
+Array.prototype.myFind = function(conditionFunc){
+    for(var i = 0 ; i < this.length; i++){
+        if(conditionFunc(this[i])){
+            return this[i];
+        }
     }
-  }
 }
 
-var ret = users.myFind(function (item, index) {
-  return item.id === 2
+Array.prototype.myFindIndex = function(conditionFunc){
+    for(var i = 0; i < this.length; i++){
+        if(conditionFunc(this[i])){
+            return i;
+        }
+    }
+}
+
+var retFind = users.myFind(function(item){
+    return item.id === 2;
 })
 
-console.log(ret)
+var retFindIndex = users.myFindIndex(function(item){
+    return item.name === '小红';
+})
+
+console.log(retFind); // { id: 2, name: '小明' }
+console.log(retFindIndex);  // 3
 ```
 
 
 
+## MongoDB
+
+### 介绍
+
+MongoDB 是一个基于分布式文件存储的数据库。由 C++ 语言编写。旨在为 WEB 应用提供可扩展的高性能数据存储解决方案。
+
+MongoDB 是一个介于关系数据库和非关系数据库之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的。
+
+### 下载和安装
+
+MongoDB 各平台下载地址：[https://www.mongodb.com/download-center#community](https://www.mongodb.com/download-center#community)
+
+- 安装完毕后进行配置环境变量
+- 输入 `mongod --version` 即可查看版本
+
+![image-20200207165936492](images/image-20200207165936492.png)
+
+#### 相关教程和链接
+
+菜鸟教程：  [https://www.runoob.com/mongodb/mongodb-tutorial.html](https://www.runoob.com/mongodb/mongodb-tutorial.html)
+
+MongoDB 官网地址：[https://www.mongodb.com/](https://www.mongodb.com/)
+
+MongoDB 官方英文文档：[https://docs.mongodb.com/manual/](https://docs.mongodb.com/manual/)
+
+MongoDB 各平台下载地址：[https://www.mongodb.com/download-center#community](https://www.mongodb.com/download-center#community)
+
+### 关系型数据库和非关系型数据库
+
+关系型和非关系型数据库的主要差异是数据存储的方式。关系型数据就是以表的形式，表与表之间存在着关系。
+
+- 所有的关系型数据库都需要通过 sql 语句来进行操作
+- 关系型数据库在操作之前都需要进行设计表结构
+- 而且数据表还支持一些约束
+  - 唯一值
+  - 主键
+  - 默认值
+  - 非空
+
+非关系型数据库非常灵活，非关系型数据通常存储在数据集中，就像文档、键值对或者图结构。
+
+- mongoDB不需要设计表结构
+- **可靠性（容错） ：**
+  - 分布式计算系统中的一个重要的优点是可靠性。一台服务器的系统崩溃并不影响到其余的服务器。
+- **可扩展性：**
+  - 在分布式计算系统可以根据需要增加更多的机器。
+- **资源共享：**
+  - 共享数据是必不可少的应用，如银行，预订系统。
+
+- **灵活性：**
+  - 由于该系统是非常灵活的，它很容易安装，实施和调试新的服务。
+
+- **更快的速度：**
+  - 分布式计算系统可以有多台计算机的计算能力，使得它比其他系统有更快的处理速度。
+
+- **开放系统：**
+  - 由于它是开放的系统，本地或者远程都可以访问到该服务。
+
+- **更高的性能：**
+  - 相较于集中式计算机网络集群可以提供更高的性能（及更好的性价比）。
 
 
 
+### 启动和关闭数据库
+
+- 在想要存储数据库的硬盘中（如E盘）根路径创建文件目录   ： `/data/db`  
+
+- 打开控制台，在控制台中输入  `mongod` ，回车，这时候就会在 E盘的 `E:\data\db`  路径中开启数据库。
+
+- 在控制台中 `Ctrl + c` 即可关闭数据库。
+- 可以通过以下方式修改默认的数据库存储目录
+
+```shell
+mongod --dbpath=数据库存储目录路径
+```
+
+### 连接数据库
+
+在保证数据库开启的情况下连接数据库：
+
+```shell
+# 默认连接本机的 MongoDB 服务
+mongo
+```
+
+退出：
+
+```shell
+exit
+```
+
+### 基本命令
+
+- 查看已经存在的数据库
+
+```shell
+show dbs
+# 以下是系统自带的数据库
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+```
+
+- 查看当前数据库
+
+```shell
+db
+# 以下是未插入数据的默认数据库
+test
+```
+
+- 插入数据
+
+```shell
+db.students.insertOne({'name':'Jack'})
+# 向数据库 test 插入了一张表，表里存在以键值对形式存储的数据
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("5e3d2ce842c85ad3bb87af84")
+}
+
+show dbs
+# 再次查看便有了 test 这个数据库
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+test    0.000GB
+
+```
+
+- 查询数据库中所有表
+
+```shell
+show collections
+students
+```
+
+- 查询表中的所有数据
+
+```shell
+db.students.find()
+{ "_id" : ObjectId("5e3d2ce842c85ad3bb87af84"), "name" : "Jack" }
+```
 
 
 
+## Mongoose
+
+适用于[node.js的](https://nodejs.org/en/)优雅[mongodb](https://www.mongodb.com/)对象建模，方便灵活
+
+### 安装
+
+首先，请确保您已安装[MongoDB](http://www.mongodb.org/downloads)和[Node.js](http://nodejs.org/)。
+
+接下来使用`npm`以下命令从命令行安装Mongoose ：
+
+```shell
+$ npm install mongoose
+```
+
+### 在node中使用
+
+#### 设计架构
+
+```javascript
+/**
+* mgTest.js
+*/
+const mongoose = require('mongoose');
+// 连接数据库
+mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true});
+
+// 设计集合结构，约束数据的类型，保证数据的完整性
+// 将文档结构发布为模型
+// mongoose.model 方法用来将一个架构发布为 model
+    // 第一个参数： 传入一个大写名词单数字符串来表示数据库的名称
+        // mongoose  会自动的将大写名词的字符串生成 小写复数 的集合名称
+        // Cat ==》 cats
+	// 第二个参数： 架构 Schema
+	// var kittySchema = new mongoose.Schema({
+  	//     name: String
+	// });
+
+// 返回值 ： 模型构造函数
+const Cat = mongoose.model('Cat', { name: String });
+// const Cat = mongoose.model('Cat', kittySchema);
+
+// 添加数据
+const kitty = new Cat({ name: 'Zildjian' });
+// 保存数据
+kitty.save().then(() => console.log('meow'));
+```
+
+结果
+
+```shell
+show collections
+cats
+students
+
+db.cats.find()
+{ "_id" : ObjectId("5e3d360dc20b8b03f85de559"), "name" : "Zildjian", "__v" : 0 }
+```
+
+### MongoDB 数据库的基本概念
+
+- 数据库（拥有数据库）
+- 集合
+- 文档（集合里面是文档）
+
+可以看成MongoDB就是一个 对象 `{}`  ，对对象进行操作。
+
+| SQL术语/概念 | MongoDB术语/概念 | 解释/说明                           |
+| :----------- | :--------------- | :---------------------------------- |
+| database     | database         | 数据库                              |
+| table        | collection       | 数据库表/集合                       |
+| row          | document         | 数据记录行/文档                     |
+| column       | field            | 数据字段/域                         |
+| index        | index            | 索引                                |
+| table joins  |                  | 表连接,MongoDB不支持                |
+| primary key  | primary key      | 主键,MongoDB自动将_id字段设置为主键 |
+
+![img](images/Figure-1-Mapping-Table-to-Collection-1.png)
+
+### 运用示例
+
+#### 查询:
+
+使用以下代码在集合中存入数据
+
+```javascript
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost:27017/user', {useNewUrlParser: true});
+
+const userSchema = {
+    name: String,
+    age: Number,
+    hobbise: String
+}
+const User = mongoose.model('User', userSchema);
+const user1 = new User({
+    name: 'Jack',
+    age: 20,
+    hobbise: '打球'
+})
+const user2 = new User({
+    name: 'Mary',
+    age: 21,
+    hobbise: '唱歌'
+})
+const user3 = new User({
+    name: 'Mike',
+    age: 20,
+    hobbise: '打球'
+})
+user1.save().then(() => console.log('插入成功'));
+user2.save().then(() => console.log('插入成功'));
+user3.save().then(() => console.log('插入成功'));
+```
+
+我们使用find进行查询所有
+
+```javascript
+User.find(function(err, res){
+    if(err) return console.log('err');
+    return console.log(res);
+})
+```
+
+```javascript
+[
+  {
+    _id: 5e3d55b574a68d15d00d4163,
+    name: 'Jack',
+    age: 20,
+    hobbise: '打球',
+    __v: 0
+  },
+  {
+    _id: 5e3d55b574a68d15d00d4164,
+    name: 'Mary',
+    age: 21,
+    hobbise: '唱歌',
+    __v: 0
+  },
+  {
+    _id: 5e3d55b574a68d15d00d4165,
+    name: 'Mike',
+    age: 20,
+    hobbise: '打球',
+    __v: 0
+  }
+]
+```
+
+使用findOne和find进行条件查询
+
+```javascript
+User.findOne({
+    name: 'Mike'
+},function(err, res){
+    if(err) return console.log('err');
+    return console.log(res);
+})
+
+User.find({
+    name: 'Mike'
+},function(err, res){
+    if(err) return console.log('err');
+    return console.log(res);
+})
+```
+
+```javascript
+// findOne
+{
+  _id: 5e3d538e3097ed47305f7d8b,
+  name: 'Mike',
+  age: 20,
+  hobbise: '打球',
+  __v: 0
+}
+// find
+[
+  {
+    _id: 5e3d538e3097ed47305f7d8b,
+    name: 'Mike',
+    age: 20,
+    hobbise: '打球',
+    __v: 0
+  }
+]
+```
+
+可以看出使用find进行条件查询的话就是一个数组，可能包含多个结果，使用findOne的结果只有一个，所以就是一个对象。
 
 
 
+#### 删除
+
+```javascript
+
+// 删除
+User.remove({
+    name: 'Mike'
+},function(err, res){
+    if(err) return console.log('error');
+    return console.log(res); // { n: 1, ok: 1, deletedCount: 1 }
+})
+```
 
 
 
+#### 更新
 
+```javascript
+var query = { name: 'Mary' };
+User.findOneAndUpdate(query, { age: 20 }, function(err, res){
+    if(err) return console.log('error');
+    return console.log(res);
+})
+```
 
 
 
