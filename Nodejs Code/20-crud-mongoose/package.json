@@ -1,0 +1,15 @@
+{
+  "name": "20-crud-mongoose",
+  "version": "1.0.0",
+  "description": "crud-mongoose",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "crud",
+    "mongoose"
+  ],
+  "author": "29",
+  "license": "ISC"
+}
