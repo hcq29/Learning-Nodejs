@@ -379,11 +379,7 @@ exports.delete = function (id, callback) {
 
 ![20200207113650734](images/20200207113650734.png)
 
-![20200207113632978](images/20200207113632978.png)
-
-
-
-
+![image-20200208165743037](images/image-20200208165743037.png)
 
 
 
